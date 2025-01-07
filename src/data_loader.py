@@ -127,53 +127,6 @@ class DatasetSimCLR(data.Dataset):
 
         return deltas
 
-    def _sampler(self, anchor_index, nb_embeddings, condition, delta_p=16, delta_n_min=1, delta_n_max=96):
-        """
-        Samples positive and negative indexes for a given anchor.
-        
-        Args:
-            anchor_index (int): Index of the anchor frame.
-            nb_embeddings (int): Total number of embeddings.
-            condition (int): Sampling condition.
-            delta_p (int, optional): Range for positive samples. Defaults to 16.
-            delta_n_min (int, optional): Min range for negative samples. Defaults to 1.
-            delta_n_max (int, optional): Max range for negative samples. Defaults to 96.
-        
-        Returns:
-            tuple: Positive and negative sample indexes.
-        """
-        random.seed(None)
-        L = nb_embeddings - 1
-        print('deltas n_conditions=2', self.get_deltas(n_conditions=2))
-        print('deltas n_conditions=3', self.get_deltas(n_conditions=3))
-        print('deltas n_conditions=4', self.get_deltas(n_conditions=4))
-        # Adjust ranges based on condition
-        if self.n_conditions == 1:
-            delta_p_min, delta_p, delta_n_min, delta_n_max = 1, 16, 1, 96
-        elif self.n_conditions == 2:
-            if condition == 0:
-                delta_p_min, delta_p, delta_n_min, delta_n_max = 16, 32, 32, 96
-            elif condition == 1:
-                delta_p_min, delta_p, delta_n_min, delta_n_max = 1, 16, 16, 32
-
-        # Sample positive indexes
-        total_positive = (
-            list(np.arange(max(anchor_index - delta_p, 0), max(anchor_index - delta_p_min, 0))) +
-            list(np.arange(min(anchor_index + delta_p_min, L), min(anchor_index + delta_p, L)))
-        )
-        positive_indexes = np.random.choice(total_positive, size=self.n_positives, replace=True)
-
-        # Sample negative indexes
-        total_negative = (
-            list(np.arange(max(anchor_index - delta_n_max, 0), max(anchor_index - delta_n_min, 0))) +
-            list(np.arange(min(anchor_index + delta_n_min, L), min(anchor_index + delta_n_max, L)))
-        )
-        negative_indexes = np.random.choice(total_negative, size=self.n_negatives, replace=True)
-
-        return positive_indexes, negative_indexes
-    
-
-
 
     def _sampler(self, anchor_index, nb_embeddings, condition):
         """
