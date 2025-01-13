@@ -23,7 +23,6 @@ class ContrastiveLoss(nn.Module):
 
         Args:
             embedding (torch.Tensor): The embeddings of shape (batch_size, embedding_dim).
-            n_conditions (int): Number of subspaces to divide the embedding into.
 
         Returns:
             torch.Tensor: The decorrelation loss.
