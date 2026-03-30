@@ -121,6 +121,6 @@ class ContrastiveLoss(nn.Module):
             total_loss += (loss_forward + loss_reverse) / 2
 
         # Normalize the total loss by the number of ssms used
-        var_covar = self.decorrelation_loss(embeddings)
+        #var_covar = self.decorrelation_loss(embeddings)
         #print(var_covar)
         return total_loss / len(ssms_list) + var_covar
